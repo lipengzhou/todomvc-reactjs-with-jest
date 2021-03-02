@@ -1,15 +1,16 @@
 import classNames from 'classnames'
+import { useMemo } from 'react'
 
 export default function TodoFooter ({ todos, removeAllDone, filterText }) {
-  const remainingCount = () => {
+  const remainingCount = useMemo(() => {
     return todos.filter(t => !t.done).length
-  }
+  }, [todos])
 
   return (
     <footer className="footer">
       {/* This should be `0 items left` by default */}
       <span className="todo-count">
-        <strong>{remainingCount()}</strong> item left
+        <strong>{remainingCount}</strong> item left
       </span>
       {/* Remove this if you don't implement routing */}
       <ul className="filters">
