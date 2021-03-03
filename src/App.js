@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import TodoHeader from './Header'
 import TodoItem from './TodoItem'
 import TodoFooter from './TodoFooter'
@@ -36,9 +36,9 @@ function App() {
     }
   }
 
-  const toggleAllState = () => {
+  const toggleAllState = useMemo(() => {
     return todos.every(t => t.done)
-  }
+  }, [todos])
 
   const toggleAll = (checked) => {
     todos.forEach(t => t.done = checked)
@@ -63,23 +63,37 @@ function App() {
     setTodos([...todos])
   }
 
-  const filters = {
-    all: () => todos,
-    active: () => todos.filter(t => !t.done),
-    completed: () => todos.filter(t => t.done)
+  const getFilterText = () => {
+    const hash = window.location.hash.substring(1)
+    let text = ''
+    switch (hash) {
+      case '/active':
+        text = 'active'
+        break
+      case '/completed':
+        text = 'completed'
+        break
+      default:
+        text = 'all'
+        break
+    }
+    return text
   }
 
-  const [filterText, setFilterText] = useState('all')
+  const [filterText, setFilterText] = useState(getFilterText())
+
+  const filterTodos = useMemo(() => {
+    if (filterText === 'all') {
+      return todos
+    } else if (filterText === 'active') {
+      return todos.filter(t => !t.done)
+    } else if (filterText === 'completed') {
+      return todos.filter(t => t.done)
+    }
+  }, [todos, filterText])
 
   window.onhashchange = () => {
-    const hash = window.location.hash.substring(1)
-    if (hash === '/') {
-      setFilterText('all')
-    } else if (hash === '/active') {
-      setFilterText('active')
-    } else if (hash === '/completed') {
-      setFilterText('completed')
-    }
+    setFilterText(getFilterText())
   }
 
   return (
@@ -87,16 +101,17 @@ function App() {
       <TodoHeader handleNewTodo={handleNewTodo} />
       {/* This section should be hidden by default and shown when there are todos */}
       <section className="main">
+        <span>{toggleAllState}</span>
         <input
           id="toggle-all"
           className="toggle-all"
           type="checkbox"
-          checked={toggleAllState()}
+          checked={toggleAllState}
           onChange={e => toggleAll(e.target.checked)}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
         <ul className="todo-list">
-          {filters[filterText]().map(todo => (
+          {filterTodos.map(todo => (
             <TodoItem
               todo={todo}
               key={todo.id}
