@@ -24,7 +24,7 @@ export default function TodoItem ({ todo, doneTodo, removeTodo, saveTodo }) {
     <li className={classNames({
       completed: todo.done,
       editing: isEdit
-    })}>
+    })} data-testid="todo-item">
       {/* These are here just to show the structure of the list items */}
       {/* List items should get the class `editing` when editing and `completed` when marked as completed */}
       <div className="view">
@@ -32,9 +32,11 @@ export default function TodoItem ({ todo, doneTodo, removeTodo, saveTodo }) {
           className="toggle"
           type="checkbox"
           checked={todo.done}
+          data-testid="todo-done"
           onChange={e => doneTodo(todo.id, e.target.checked)}
         />
         <label
+          data-testid="todo-text"
           onDoubleClick={() => {
             setIsEdit(true)
             setTimeout(() => {
@@ -44,6 +46,7 @@ export default function TodoItem ({ todo, doneTodo, removeTodo, saveTodo }) {
         >{todo.text}</label>
         <button
           className="destroy"
+          data-testid="destroy"
           onClick={() => removeTodo(todo.id)}
         ></button>
       </div>
@@ -53,6 +56,7 @@ export default function TodoItem ({ todo, doneTodo, removeTodo, saveTodo }) {
         autoFocus
         defaultValue={todo.text}
         onBlur={saveEdit}
+        data-testid="todo-edit"
         onKeyUp={e => {
           if (e.key === 'Enter') { // 保存编辑
             saveEdit(e)

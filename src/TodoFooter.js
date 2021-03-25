@@ -1,42 +1,58 @@
-import classNames from 'classnames'
+// import classNames from 'classnames'
 import { useMemo } from 'react'
+import { NavLink } from 'react-router-dom'
 
 export default function TodoFooter ({ todos, removeAllDone, filterText }) {
-  const remainingCount = useMemo(() => {
-    return todos.filter(t => !t.done).length
-  }, [todos])
+  const remainingCount = useMemo(
+    () => {
+      return todos.filter((t) => t.done).length
+    },
+    [ todos ]
+  )
 
   return (
     <footer className="footer">
       {/* This should be `0 items left` by default */}
       <span className="todo-count">
-        <strong>{remainingCount}</strong> item left
+        <strong data-testid="remaining">{remainingCount}</strong> item left
       </span>
       {/* Remove this if you don't implement routing */}
       <ul className="filters">
         <li>
-          <a className={classNames({
-            selected: filterText === 'all'
-          })} href="#/">
+          <NavLink
+            activeClassName="selected"
+            exact
+            to="/"
+            data-testid="link-all"
+          >
             All
-          </a>
+          </NavLink>
         </li>
         <li>
-          <a className={classNames({
-            selected: filterText === 'active'
-          })} href="#/active">Active</a>
+          <NavLink
+            activeClassName="selected"
+            to="/active"
+            data-testid="link-active"
+          >
+            Active
+          </NavLink>
         </li>
         <li>
-          <a className={classNames({
-            selected: filterText === 'completed'
-          })} href="#/completed">Completed</a>
+          <NavLink
+            activeClassName="selected"
+            to="/completed"
+            data-testid="link-completed"
+          >
+            Completed
+          </NavLink>
         </li>
       </ul>
       {/* Hidden if no completed items are left ↓ */}
-      <button
-        className="clear-completed"
-        onClick={removeAllDone}
-      >Clear completed</button>
+      {remainingCount && (
+        <button className="clear-completed" data-testid="clear-completed" onClick={removeAllDone}>
+          Clear completed
+        </button>
+      )}
     </footer>
   )
 }

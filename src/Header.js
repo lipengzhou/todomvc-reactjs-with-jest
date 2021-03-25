@@ -20,6 +20,7 @@ export default function TodoHeader (props) {
         className="new-todo"
         placeholder="What needs to be done?"
         autoFocus
+        data-testid="new-todo"
         onKeyUp={handleNewTodo}
       />
     </header>

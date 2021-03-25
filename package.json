@@ -7,7 +7,6 @@
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",
     "@svgr/webpack": "5.5.0",
     "@testing-library/jest-dom": "^5.11.9",
-    "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.8.0",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
     "@typescript-eslint/parser": "^4.5.0",
@@ -55,6 +54,7 @@
     "react-dev-utils": "^11.0.3",
     "react-dom": "^17.0.1",
     "react-refresh": "^0.8.3",
+    "react-router-dom": "^5.2.0",
     "resolve": "1.18.1",
     "resolve-url-loader": "^3.1.2",
     "sass-loader": "^10.0.5",
@@ -96,5 +96,8 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "@testing-library/react": "^11.2.5"
   }
 }
